@@ -15,6 +15,7 @@
 		75E33AF81C9CF3C600CBD0B8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75E33AF71C9CF3C600CBD0B8 /* Assets.xcassets */; };
 		75E33AFB1C9CF3C600CBD0B8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75E33AF91C9CF3C600CBD0B8 /* LaunchScreen.storyboard */; };
 		75E33B051C9CF73E00CBD0B8 /* T8NetworkBaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B041C9CF73E00CBD0B8 /* T8NetworkBaseService.m */; };
+		75E33B081C9D05AD00CBD0B8 /* T8NetworkError.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		75E33AFC1C9CF3C600CBD0B8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75E33B031C9CF73E00CBD0B8 /* T8NetworkBaseService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = T8NetworkBaseService.h; sourceTree = "<group>"; };
 		75E33B041C9CF73E00CBD0B8 /* T8NetworkBaseService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = T8NetworkBaseService.m; sourceTree = "<group>"; };
+		75E33B061C9D05AD00CBD0B8 /* T8NetworkError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = T8NetworkError.h; sourceTree = "<group>"; };
+		75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = T8NetworkError.m; sourceTree = "<group>"; };
 		D9F8571CAD7B20D35BDBF241 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +98,8 @@
 			children = (
 				75E33B031C9CF73E00CBD0B8 /* T8NetworkBaseService.h */,
 				75E33B041C9CF73E00CBD0B8 /* T8NetworkBaseService.m */,
+				75E33B061C9D05AD00CBD0B8 /* T8NetworkError.h */,
+				75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */,
 			);
 			path = T8NetWorkKit;
 			sourceTree = "<group>";
@@ -237,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75E33B081C9D05AD00CBD0B8 /* T8NetworkError.m in Sources */,
 				75E33AF31C9CF3C600CBD0B8 /* ViewController.m in Sources */,
 				75E33AF01C9CF3C600CBD0B8 /* AppDelegate.m in Sources */,
 				75E33AED1C9CF3C600CBD0B8 /* main.m in Sources */,
