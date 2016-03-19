@@ -17,6 +17,8 @@
 		75E33B051C9CF73E00CBD0B8 /* T8NetworkBaseService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B041C9CF73E00CBD0B8 /* T8NetworkBaseService.m */; };
 		75E33B081C9D05AD00CBD0B8 /* T8NetworkError.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */; };
 		75E33B121C9D2DEE00CBD0B8 /* DemoService.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B111C9D2DEE00CBD0B8 /* DemoService.m */; };
+		75E33B171C9D814000CBD0B8 /* PostParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B161C9D814000CBD0B8 /* PostParams.m */; };
+		75E33B1A1C9D850500CBD0B8 /* GetParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33B191C9D850500CBD0B8 /* GetParams.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,10 @@
 		75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = T8NetworkError.m; sourceTree = "<group>"; };
 		75E33B101C9D2DEE00CBD0B8 /* DemoService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoService.h; sourceTree = "<group>"; };
 		75E33B111C9D2DEE00CBD0B8 /* DemoService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoService.m; sourceTree = "<group>"; };
+		75E33B151C9D814000CBD0B8 /* PostParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostParams.h; sourceTree = "<group>"; };
+		75E33B161C9D814000CBD0B8 /* PostParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostParams.m; sourceTree = "<group>"; };
+		75E33B181C9D850500CBD0B8 /* GetParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetParams.h; sourceTree = "<group>"; };
+		75E33B191C9D850500CBD0B8 /* GetParams.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetParams.m; sourceTree = "<group>"; };
 		D9F8571CAD7B20D35BDBF241 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +87,10 @@
 				75E33AF21C9CF3C600CBD0B8 /* ViewController.m */,
 				75E33B101C9D2DEE00CBD0B8 /* DemoService.h */,
 				75E33B111C9D2DEE00CBD0B8 /* DemoService.m */,
+				75E33B151C9D814000CBD0B8 /* PostParams.h */,
+				75E33B161C9D814000CBD0B8 /* PostParams.m */,
+				75E33B181C9D850500CBD0B8 /* GetParams.h */,
+				75E33B191C9D850500CBD0B8 /* GetParams.m */,
 				75E33AF41C9CF3C600CBD0B8 /* Main.storyboard */,
 				75E33AF71C9CF3C600CBD0B8 /* Assets.xcassets */,
 				75E33AF91C9CF3C600CBD0B8 /* LaunchScreen.storyboard */,
@@ -249,7 +259,9 @@
 			files = (
 				75E33B081C9D05AD00CBD0B8 /* T8NetworkError.m in Sources */,
 				75E33AF31C9CF3C600CBD0B8 /* ViewController.m in Sources */,
+				75E33B1A1C9D850500CBD0B8 /* GetParams.m in Sources */,
 				75E33B121C9D2DEE00CBD0B8 /* DemoService.m in Sources */,
+				75E33B171C9D814000CBD0B8 /* PostParams.m in Sources */,
 				75E33AF01C9CF3C600CBD0B8 /* AppDelegate.m in Sources */,
 				75E33AED1C9CF3C600CBD0B8 /* main.m in Sources */,
 				75E33B051C9CF73E00CBD0B8 /* T8NetworkBaseService.m in Sources */,

@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "T8NetworkBaseService.h"
 #import "DemoService.h"
+#import "PostParams.h"
+#import "GetParams.h"
 
 @interface ViewController ()
 
@@ -19,13 +21,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self testPost];
+    [self testGet];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)testPost
 {
-    [DemoService testRequestWithId:@"3704212316" secret:@"1c5cd4c8a41fa09faedeead805a66717" type:@"authorization_code" code:@"b07fd2f79d0edd738df59b6c50d542b8" uri:@"http://login.zhongsou.com" block:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    PostParams *params = [[PostParams alloc]init];
+    params.client_id = @"3704212316";
+    params.client_secret = @"1c5cd4c8a41fa09faedeead805a66717";
+    params.grant_type = @"authorization_code";
+    params.code = @"b07fd2f79d0edd738df59b6c50d542b8";
+    params.redirect_uri = @"http://login.zhongsou.com";
+    
+    [DemoService testRequestWithPostParams:params block:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         NSLog(@"%@", data);
     }];
 }
@@ -39,9 +48,9 @@
         [request setValue:@"56c6c309243cb728205a3dff" forHTTPHeaderField:@"x-app-id"];
     }];
 
-    [DemoService testRequestWithLimit:20 last:nil block:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
-        NSLog(@"tt:%@", data);
+    GetParams *getParam = [[GetParams alloc]init];
+    [DemoService testRequestWithGetParmas:getParam block:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+        NSLog(@"%@", data);
     }];
-
 }
 @end

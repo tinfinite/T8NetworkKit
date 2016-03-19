@@ -9,8 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "T8NetworkBaseService.h"
 
+@class PostParams;
+@class GetParams;
+
 @interface DemoService : NSObject
 
-+ (void)testRequestWithLimit:(NSInteger)limit last:(NSString *)last block:(RequestComplete)requestComplete;
-+ (void)testRequestWithId:(NSString *)id secret:(NSString *)secret type:(NSString *)type code:(NSString *)code uri:(NSString *)uri block:(RequestComplete)requestComplete;
++ (void)testRequestWithGetParmas:(GetParams *)getParams block:(RequestComplete)requestComplete;
++ (void)testRequestWithPostParams:(PostParams *)postParams block:(RequestComplete)requestComplete;
+
 @end

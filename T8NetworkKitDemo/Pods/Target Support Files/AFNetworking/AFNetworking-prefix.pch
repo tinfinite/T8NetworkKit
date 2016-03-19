@@ -13,5 +13,3 @@
 #ifndef TARGET_OS_TV
   #define TARGET_OS_TV 0
 #endif
-
-#import "AFNetworking.h"

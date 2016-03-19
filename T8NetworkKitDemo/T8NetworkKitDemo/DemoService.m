@@ -7,44 +7,38 @@
 //
 
 #import "DemoService.h"
+#import "MJExtension.h"
+#import "PostParams.h"
+#import "GetParams.h"
 
 @implementation DemoService
 
-
-+ (void)testRequestWithLimit:(NSInteger)limit last:(NSString *)last block:(RequestComplete)requestComplete
++ (void)testRequestWithGetParmas:(GetParams *)getParams block:(RequestComplete)requestComplete
 {
     NSString *urlPath = @"v2/moments";
     
-    NSMutableDictionary *mutDict = [NSMutableDictionary dictionary];
-    [mutDict setObject:@(limit) forKey:@"limit"];
-    if (last.length) {
-        [mutDict setObject:last forKey:@"last"];
-    }
-    
-    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodGet dictParams:mutDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    NSMutableDictionary *mulDict = getParams.mj_keyValues;
+    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodGet dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
     }];
+
 }
 
-+ (void)testRequestWithId:(NSString *)ID secret:(NSString *)secret type:(NSString *)type code:(NSString *)code uri:(NSString *)uri block:(RequestComplete)requestComplete
++ (void)testRequestWithPostParams:(PostParams *)postParams block:(RequestComplete)requestComplete
 {
     NSString *urlPath = @"https://api.weibo.com/oauth2/access_token";
     
-    NSMutableDictionary *mutDict = [NSMutableDictionary dictionary];
-    [mutDict setObject:ID forKey:@"client_id"];
-    [mutDict setObject:secret forKey:@"client_secret"];
-    [mutDict setObject:type forKey:@"grant_type"];
-    [mutDict setObject:code forKey:@"code"];
-    [mutDict setObject:uri forKey:@"redirect_uri"];
-
+    //将模型数据postParams -> Json
+    NSMutableDictionary *mulDict = postParams.mj_keyValues;
     
-    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodPost dictParams:mutDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodPost dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
     }];
+
 }
 
 
