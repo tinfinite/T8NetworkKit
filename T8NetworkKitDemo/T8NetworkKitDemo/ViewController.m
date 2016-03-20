@@ -42,7 +42,7 @@
 - (void)testGet
 {
     [T8NetworkBaseService setBaseUrl:@"http://api-saas-dev.tinfinite.com"];
-    [T8NetworkBaseService setHandleBlock:^(NSMutableURLRequest *request) {
+    [T8NetworkBaseService setHeaderBlock:^(NSMutableURLRequest *request) {
         [request setValue:@"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNTZlNjdjYjc3ZTJjYzI4YTIxYjg5MzI3IiwiZGV2aWNlX2lkIjoiRTQ1RTIyQkMtQUYxMC00RTI2LUJDOUYtQUI5OEFFNzE4RDQ0IiwidHMiOjE0NTgyODgxMTc1MTMsImFwcF9pZCI6IjU2YzZjMzA5MjQzY2I3MjgyMDVhM2RmZiIsImlhdCI6MTQ1ODI4ODExN30.v4Sex80uTUVN7htZz-LoDuaqHLFmtPlzcZ5jxGHXUzI" forHTTPHeaderField:@"x-access-token"];
         [request setValue:@"ewogICJwaG9uZV9tb2RlbCIgOiAiaVBob25lIiwKICAicmVsZWFzZV9jaGFubmVsIiA6ICJhcHBfc3RvcmUiLAogICJhcHBfdmVyc2lvbiIgOiAiMTAwIiwKICAib3NfdmVyc2lvbiIgOiAiOS4yLjEiLAogICJkZXZpY2VfdG9rZW4iIDogIjZjNGI2NGQ5ZDgzYTVlNjY0ZDg3N2EwNTRhODMzZWNiMzg4MmQyOWVlYTdmZWNkZTE2YWEzMGFkMzQ3MzEzYTgiLAogICJwbGF0Zm9ybSIgOiAiaU9TIgp9" forHTTPHeaderField:@"x-device-info"];
         [request setValue:@"56c6c309243cb728205a3dff" forHTTPHeaderField:@"x-app-id"];

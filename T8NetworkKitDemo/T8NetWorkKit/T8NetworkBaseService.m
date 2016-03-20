@@ -9,9 +9,8 @@
 #import "T8NetworkBaseService.h"
 #import "AFNetworking.h"
 #import "T8NetworkError.h"
-
 static NSString *T8BaseNetworkUrl = nil;
-static RequestHandleBlock T8RequestHandleBlock = nil;
+static RequestHeaderBlock T8RequestHeaderBlock = nil;
 
 @implementation T8NetworkBaseService
 
@@ -20,9 +19,9 @@ static RequestHandleBlock T8RequestHandleBlock = nil;
     T8BaseNetworkUrl = baseUrl;
 }
 
-+ (void)setHandleBlock:(RequestHandleBlock)handleBlock
++ (void)setHeaderBlock:(RequestHeaderBlock)headerBlock
 {
-    T8RequestHandleBlock = handleBlock;
+    T8RequestHeaderBlock = headerBlock;
 }
 
 + (AFHTTPSessionManager *)shareHttpManager
@@ -39,78 +38,71 @@ static RequestHandleBlock T8RequestHandleBlock = nil;
 
 + (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock
 {
-    [self sendRequestUrlPath:strUrlPath httpMethod:httpMethod dictParams:dictParams completeBlock:completeBlock cachePolicy:-1];
-}
-
-+ (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock useCacheWhenFail:(BOOL)cache
-{
-    if (cache) {
-        [self sendRequestUrlPath:strUrlPath httpMethod:httpMethod dictParams:dictParams completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
-            if (status == RequestStatusSuccess) {
-                completeBlock(status, data, error);
-            }else{
-                [T8NetworkBaseService sendRequestUrlPath:strUrlPath httpMethod:httpMethod dictParams:dictParams completeBlock:completeBlock cachePolicy:NSURLRequestReturnCacheDataDontLoad];
-            }
-        }];
-    }else{
-        [self sendRequestUrlPath:strUrlPath httpMethod:httpMethod dictParams:dictParams completeBlock:completeBlock];
-    }
-}
-
-
-
-+ (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock cachePolicy:(NSURLRequestCachePolicy)policy
-{
     AFHTTPSessionManager *manager = [self shareHttpManager];
     
     NSString *method = [self getMethodTypeString:httpMethod];
     NSString *urlStr = [self getRequestUrl:strUrlPath];
     NSLog(@"%@", urlStr);
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:urlStr parameters:dictParams error:nil];
-    request.cachePolicy = policy;
-    if (T8RequestHandleBlock) {
-        T8RequestHandleBlock(request);
+    if (T8RequestHeaderBlock) {
+        T8RequestHeaderBlock(request);
     }
     
     NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@", error);
+            T8NetworkError *_error = [T8NetworkError errorWithNSError:error];
+            completeBlock(RequestStatusFailure, nil, _error);
         } else {
-            NSLog(@"%@ %@", response, responseObject);
+            completeBlock(RequestStatusSuccess, responseObject, nil);
         }
     }];
     [dataTask resume];
 }
 
-
-#pragma mark Private
-/**
- *  发送一个GET请求
- *
- *  @param url     请求路径
- *  @param params  请求参数
- *  @param result  请求成功或失败后的回调
- */
-+ (void)getWithURL:(NSString *)url params:(NSDictionary *)params success:(RequestComplete)result andRequest:(NSMutableURLRequest *)request;
++ (void)uploadFile:(FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock
 {
     AFHTTPSessionManager *manager = [self shareHttpManager];
-
-    [manager GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
-        NSLog(@"%@", downloadProgress.localizedDescription);
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (result != nil) {
-            result(RequestStatusSuccess, responseObject, nil);
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        if (result != nil) {
-            T8NetworkError *_error = [T8NetworkError errorWithNSError:error];
-            NSLog(@"%@",_error);
-            result(RequestStatusFailure, nil, _error);
-        }
-    }];
     
+    NSURL *URL = [NSURL URLWithString:fileModel.fileName];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    if (T8RequestHeaderBlock) {
+        T8RequestHeaderBlock(request);
+    }
+    
+    NSString *type = fileModel.type;
+    NSURLSessionUploadTask *uploadTask = nil;
+    if ([type isEqualToString:@"data"]) {
+        NSURL *filePath = [NSURL fileURLWithPath:strUrlPath];
+        
+        uploadTask = [manager uploadTaskWithRequest:request fromFile:filePath progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            
+        }];
+    } else if ([type isEqualToString:@"path"]) {
+        uploadTask = [manager uploadTaskWithRequest:request fromData:fileModel.data progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            
+        }];
+    }
+    [uploadTask resume];
 }
 
+
+
++ (void)uploadFiles:(FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
+{
+    NSArray *fileModelArray = files.fileModelArray;
+    
+    for (id fileModel in fileModelArray) {
+        if ([fileModel isKindOfClass:[FileModel class]]) {
+            [self uploadFile:fileModel urlPath:strUrlPath params:params progressBlock:progressBlock completBlock:completBlock];
+        }
+    }
+}
+
+#pragma mark Private
 
 /**
  *  HTTP方法:枚举->字符串
@@ -159,7 +151,12 @@ static RequestHandleBlock T8RequestHandleBlock = nil;
 }
 
 
+@end
 
+@implementation FileModel
 
+@end
+
+@implementation FileModelArray
 
 @end
