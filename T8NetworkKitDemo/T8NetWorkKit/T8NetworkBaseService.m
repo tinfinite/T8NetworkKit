@@ -59,11 +59,11 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     [dataTask resume];
 }
 
-+ (void)uploadFile:(FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock
++ (void)uploadFile:(FileModel *)fileModel urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock
 {
     AFHTTPSessionManager *manager = [self shareHttpManager];
     
-    NSURL *URL = [NSURL URLWithString:fileModel.fileName];
+    NSURL *URL = [NSURL URLWithString:urlPath];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
     if (T8RequestHeaderBlock) {
         T8RequestHeaderBlock(request);
@@ -72,7 +72,7 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     NSString *type = fileModel.type;
     NSURLSessionUploadTask *uploadTask = nil;
     if ([type isEqualToString:@"data"]) {
-        NSURL *filePath = [NSURL fileURLWithPath:strUrlPath];
+        NSURL *filePath = [NSURL fileURLWithPath:fileModel.fileName];
         
         uploadTask = [manager uploadTaskWithRequest:request fromFile:filePath progress:^(NSProgress * _Nonnull uploadProgress) {
             
