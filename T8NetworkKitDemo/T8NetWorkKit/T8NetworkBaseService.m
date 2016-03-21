@@ -59,47 +59,76 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     [dataTask resume];
 }
 
-+ (void)uploadFile:(FileModel *)fileModel urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock
++ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock
 {
     AFHTTPSessionManager *manager = [self shareHttpManager];
-    
-    NSURL *URL = [NSURL URLWithString:urlPath];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:URL];
+    NSString *urlStr = [self getRequestUrl:urlPath];
+
+    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[self getRequestUrl:urlStr] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (fileModel.type == FileModelData) {
+            if (fileModel.data) {
+                [formData appendPartWithFileData:fileModel.data name:@"" fileName:@"" mimeType:fileModel.mimeType];
+            }
+        }else if (fileModel.type == FileModelPath){
+            if (fileModel.path.length > 0) {
+                [formData appendPartWithFileURL:[NSURL URLWithString:fileModel.path] name:@"" fileName:@"" mimeType:fileModel.mimeType error:nil];
+            }
+        }
+    } error:nil];
+
     if (T8RequestHeaderBlock) {
         T8RequestHeaderBlock(request);
     }
     
-    NSString *type = fileModel.type;
-    NSURLSessionUploadTask *uploadTask = nil;
-    if ([type isEqualToString:@"data"]) {
-        NSURL *filePath = [NSURL fileURLWithPath:fileModel.fileName];
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
         
-        uploadTask = [manager uploadTaskWithRequest:request fromFile:filePath progress:^(NSProgress * _Nonnull uploadProgress) {
-            
-        } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            
-        }];
-    } else if ([type isEqualToString:@"path"]) {
-        uploadTask = [manager uploadTaskWithRequest:request fromData:fileModel.data progress:^(NSProgress * _Nonnull uploadProgress) {
-            
-        } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            
-        }];
-    }
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"Error: %@", error);
+            } else {
+                NSLog(@"%@ %@", response, responseObject);
+            }
+    }];
     [uploadTask resume];
 }
 
 
 
-+ (void)uploadFiles:(FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
++ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
 {
     NSArray *fileModelArray = files.fileModelArray;
     
-    for (id fileModel in fileModelArray) {
-        if ([fileModel isKindOfClass:[FileModel class]]) {
-            [self uploadFile:fileModel urlPath:strUrlPath params:params progressBlock:progressBlock completBlock:completBlock];
+    AFHTTPSessionManager *manager = [self shareHttpManager];
+    NSString *urlStr = [self getRequestUrl:urlPath];
+    
+    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[self getRequestUrl:urlStr] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        for (T8FileModel *fileModel in fileModelArray) {
+            if (fileModel.type == FileModelData) {
+                if (fileModel.data) {
+                    [formData appendPartWithFileData:fileModel.data name:@"" fileName:@"" mimeType:fileModel.mimeType];
+                }
+            }else if (fileModel.type == FileModelPath){
+                if (fileModel.path.length > 0) {
+                    [formData appendPartWithFileURL:[NSURL URLWithString:fileModel.path] name:@"" fileName:@"" mimeType:fileModel.mimeType error:nil];
+                }
+            }
         }
+    } error:nil];
+    
+    if (T8RequestHeaderBlock) {
+        T8RequestHeaderBlock(request);
     }
+    
+    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error: %@", error);
+        } else {
+            NSLog(@"%@ %@", response, responseObject);
+        }
+    }];
+    [uploadTask resume];
 }
 
 #pragma mark Private
@@ -153,10 +182,10 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
 
 @end
 
-@implementation FileModel
+@implementation T8FileModel
 
 @end
 
-@implementation FileModelArray
+@implementation T8FileModelArray
 
 @end

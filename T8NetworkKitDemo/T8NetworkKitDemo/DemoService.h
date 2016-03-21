@@ -16,5 +16,5 @@
 
 + (void)testRequestWithGetParmas:(GetParams *)getParams block:(RequestComplete)requestComplete;
 + (void)testRequestWithPostParams:(PostParams *)postParams block:(RequestComplete)requestComplete;
-
++ (void)testUploads:(T8FileModel *)fileModel block:(RequestComplete)requestComplete;
 @end

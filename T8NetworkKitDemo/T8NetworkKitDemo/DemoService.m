@@ -10,6 +10,7 @@
 #import "MJExtension.h"
 #import "PostParams.h"
 #import "GetParams.h"
+#import <UIKit/UIKit.h>
 
 @implementation DemoService
 
@@ -40,6 +41,21 @@
     }];
 
 }
+//+ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
+
++ (void)testUploads:(T8FileModel *)fileModel block:(RequestComplete)requestComplete
+{
+    NSString *urlPath = @"v2/upload/picture";
+    
+    [T8NetworkBaseService uploadFile:fileModel urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        
+    } completBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+        if (requestComplete) {
+            requestComplete(status, data, error);
+        }
+    }];
+}
+
 
 
 @end

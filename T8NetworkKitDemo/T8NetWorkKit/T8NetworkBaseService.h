@@ -24,6 +24,13 @@ typedef NS_ENUM(NSInteger, HttpMethod) {
     HttpMethodHead
 };
 
+
+typedef NS_ENUM(NSInteger, FileModelType) {
+    FileModelData,
+    FileModelPath
+};
+
+
 typedef void(^RequestComplete)(RequestStatus status, NSDictionary *data, T8NetworkError *error);
 typedef void(^RequestHeaderBlock)(NSMutableURLRequest *request);
 typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite);
@@ -31,17 +38,18 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
 /**
  *  文件模型
  */
-@interface FileModel : NSObject
-@property (nonatomic, copy) NSString *type;
-@property (nonatomic, copy) NSString *fileName;
+@interface T8FileModel : NSObject
+@property (nonatomic, assign) FileModelType type;
+@property (nonatomic, copy) NSString *path;
 @property (nonatomic, strong) NSData *data;
-
+@property (nonatomic, copy) NSString *fileName;
+@property (nonatomic, copy) NSString *mimeType;
 @end
 
 /**
  *  文件模型数据
  */
-@interface FileModelArray : NSObject
+@interface T8FileModelArray : NSObject
 @property (nonatomic, strong) NSArray *fileModelArray;
 
 @end
@@ -77,7 +85,7 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传成功回调方法
  */
-+ (void)uploadFile:(FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
++ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
 
 /**
  *  上传一组文件
@@ -88,7 +96,7 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传完成回调方法
  */
-+ (void)uploadFiles:(FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
++ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
 
 @end
 
