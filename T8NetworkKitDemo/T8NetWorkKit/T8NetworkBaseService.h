@@ -42,15 +42,16 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
 @property (nonatomic, assign) FileModelType type;
 @property (nonatomic, copy) NSString *path;
 @property (nonatomic, strong) NSData *data;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *fileName;
 @property (nonatomic, copy) NSString *mimeType;
 @end
 
 /**
- *  文件模型数据
+ *  文件模型数组
  */
 @interface T8FileModelArray : NSObject
-@property (nonatomic, strong) NSArray *fileModelArray;
+@property (nonatomic, strong) NSArray<T8FileModel *> *fileModelArray;
 
 @end
 
@@ -85,7 +86,7 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传成功回调方法
  */
-+ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
++ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
 
 /**
  *  上传一组文件
@@ -96,7 +97,7 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传完成回调方法
  */
-+ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completBlock:(RequestComplete)completBlock;
++ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
 
 @end
 
