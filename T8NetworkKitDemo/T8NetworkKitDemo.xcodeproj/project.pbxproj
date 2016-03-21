@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3FB896DB94C8572FB4C92510 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 042B099277402A303BA96B6C /* libPods.a */; };
+		75DE4EDA1CA01FBA00197A05 /* abc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 75DE4ED91CA01FBA00197A05 /* abc.jpg */; };
 		75E33AED1C9CF3C600CBD0B8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AEC1C9CF3C600CBD0B8 /* main.m */; };
 		75E33AF01C9CF3C600CBD0B8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AEF1C9CF3C600CBD0B8 /* AppDelegate.m */; };
 		75E33AF31C9CF3C600CBD0B8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AF21C9CF3C600CBD0B8 /* ViewController.m */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		042B099277402A303BA96B6C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		376022D6C7BDBC00C21502E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		75DE4ED91CA01FBA00197A05 /* abc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = abc.jpg; sourceTree = "<group>"; };
 		75E33AE81C9CF3C600CBD0B8 /* T8NetworkKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = T8NetworkKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75E33AEC1C9CF3C600CBD0B8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		75E33AEE1C9CF3C600CBD0B8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				75E33AF71C9CF3C600CBD0B8 /* Assets.xcassets */,
 				75E33AF91C9CF3C600CBD0B8 /* LaunchScreen.storyboard */,
 				75E33AFC1C9CF3C600CBD0B8 /* Info.plist */,
+				75DE4ED91CA01FBA00197A05 /* abc.jpg */,
 				75E33AEB1C9CF3C600CBD0B8 /* Supporting Files */,
 			);
 			path = T8NetworkKitDemo;
@@ -196,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75DE4EDA1CA01FBA00197A05 /* abc.jpg in Resources */,
 				75E33AFB1C9CF3C600CBD0B8 /* LaunchScreen.storyboard in Resources */,
 				75E33AF81C9CF3C600CBD0B8 /* Assets.xcassets in Resources */,
 				75E33AF61C9CF3C600CBD0B8 /* Main.storyboard in Resources */,

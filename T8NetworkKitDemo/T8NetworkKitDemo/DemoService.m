@@ -46,15 +46,34 @@
 + (void)testUploads:(T8FileModel *)fileModel block:(RequestComplete)requestComplete
 {
     NSString *urlPath = @"v2/upload/picture";
+//    NSString *urlPath = @"https://slack.com/api/files.upload?token=xoxp-28180523860-28139895139-28194787457-d910c3f484&filename=abc&pretty=1";
     
     [T8NetworkBaseService uploadFile:fileModel urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        
-    } completBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+        NSLog(@"bytesWritten:%lu", (unsigned long)bytesWritten);
+        NSLog(@"totalBytesWritten:%lld", totalBytesWritten);
+    } completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
     }];
 }
+
++ (void)testFilesUploads:(T8FileModelArray *)fileModelArray block:(RequestComplete)requestComplete
+{
+    NSString *urlPath = @"v2/upload/picture";
+    //    NSString *urlPath = @"https://slack.com/api/files.upload?token=xoxp-28180523860-28139895139-28194787457-d910c3f484&filename=abc&pretty=1";
+    
+    [T8NetworkBaseService uploadFiles:fileModelArray urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        NSLog(@"bytesWritten:%lu", (unsigned long)bytesWritten);
+        NSLog(@"totalBytesWritten:%lld", totalBytesWritten);
+
+    } completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+        if (requestComplete) {
+            requestComplete(status, data, error);
+        }
+    }];
+}
+
 
 
 
