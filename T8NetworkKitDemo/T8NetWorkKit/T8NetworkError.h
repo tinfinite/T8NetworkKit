@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, RequestStatus)
+{
+    RequestStatusSuccess,
+    RequestStatusFailure
+};
+
 @interface T8NetworkError : NSError
 /**
  * 返回由NSError构建的错误对象.

@@ -19,7 +19,8 @@
     NSString *urlPath = @"v2/moments";
     
     NSMutableDictionary *mulDict = getParams.mj_keyValues;
-    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodGet dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    T8NetworkBaseService *baseService = [T8NetworkBaseService shrareInstance];
+    [baseService sendRequestUrlPath:urlPath httpMethod:HttpMethodGet dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
@@ -33,8 +34,9 @@
     
     //将模型数据postParams -> Json
     NSMutableDictionary *mulDict = postParams.mj_keyValues;
-    
-    [T8NetworkBaseService sendRequestUrlPath:urlPath httpMethod:HttpMethodPost dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    T8NetworkBaseService *baseService = [T8NetworkBaseService shrareInstance];
+
+    [baseService sendRequestUrlPath:urlPath httpMethod:HttpMethodPost dictParams:mulDict completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
@@ -45,11 +47,33 @@
 
 + (void)testUploads:(T8FileModel *)fileModel block:(RequestComplete)requestComplete
 {
+    T8NetworkBaseService *baseService = [T8NetworkBaseService shrareInstance];
+
     NSString *urlPath = @"v2/upload/picture";
+//    NSString *urlPath = @"https://slack.com/api/files.upload?token=xoxp-28180523860-28139895139-28194787457-d910c3f484&filename=abc&pretty=1";
     
-    [T8NetworkBaseService uploadFile:fileModel urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        
-    } completBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+    [baseService uploadFile:fileModel urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        NSLog(@"bytesWritten:%lu", (unsigned long)bytesWritten);
+        NSLog(@"totalBytesWritten:%lld", totalBytesWritten);
+    } completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
+        NSLog(@"%@", data);
+        if (requestComplete) {
+            requestComplete(status, data, error);
+        }
+    }];
+}
+
++ (void)testFilesUploads:(T8FileModelArray *)fileModelArray block:(RequestComplete)requestComplete
+{
+    NSString *urlPath = @"v2/upload/picture";
+    //    NSString *urlPath = @"https://slack.com/api/files.upload?token=xoxp-28180523860-28139895139-28194787457-d910c3f484&filename=abc&pretty=1";
+    T8NetworkBaseService *baseService = [T8NetworkBaseService shrareInstance];
+
+    [baseService uploadFiles:fileModelArray urlPath:urlPath params:nil progressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        NSLog(@"bytesWritten:%lu", (unsigned long)bytesWritten);
+        NSLog(@"totalBytesWritten:%lld", totalBytesWritten);
+
+    } completeBlock:^(RequestStatus status, NSDictionary *data, T8NetworkError *error) {
         if (requestComplete) {
             requestComplete(status, data, error);
         }
@@ -58,4 +82,19 @@
 
 
 
+
 @end
+
+@implementation FriendsModel
+- (NSDictionary *)mj_ObjectClassInArray
+{
+    return @{@"list" : [FriendModel class]};
+}
+
+@end
+
+@implementation FriendModel
+
+@end
+
+

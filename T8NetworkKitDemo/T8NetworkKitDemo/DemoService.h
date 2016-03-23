@@ -17,4 +17,19 @@
 + (void)testRequestWithGetParmas:(GetParams *)getParams block:(RequestComplete)requestComplete;
 + (void)testRequestWithPostParams:(PostParams *)postParams block:(RequestComplete)requestComplete;
 + (void)testUploads:(T8FileModel *)fileModel block:(RequestComplete)requestComplete;
++ (void)testFilesUploads:(T8FileModelArray *)fileModelArray block:(RequestComplete)requestComplete;
+@end
+
+@interface FriendsModel : NSObject
+@property (nonatomic, strong) NSArray *list;
+@property (nonatomic, assign) NSInteger status;
+@property (nonatomic, copy) NSString *id;
+
+@end
+
+@interface FriendModel : NSObject
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, assign) NSInteger age;
+
+
 @end
