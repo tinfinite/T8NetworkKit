@@ -8,47 +8,56 @@
 
 #import "T8NetworkBaseService.h"
 #import "AFNetworking.h"
-#import "T8NetworkError.h"
-static NSString *T8BaseNetworkUrl = nil;
-static RequestHeaderBlock T8RequestHeaderBlock = nil;
+#import "T8NetworkConifig.h"
 
-@implementation T8NetworkBaseService
-
-+ (void)setBaseUrl:(NSString *)baseUrl
-{
-    T8BaseNetworkUrl = baseUrl;
+@implementation T8NetworkBaseService{
+    T8NetworkConifig *_config;
+    AFHTTPSessionManager *_manager;
 }
 
-+ (void)setHeaderBlock:(RequestHeaderBlock)headerBlock
++ (T8NetworkBaseService *)shrareInstance
 {
-    T8RequestHeaderBlock = headerBlock;
-}
-
-+ (AFHTTPSessionManager *)shareHttpManager
-{
-    static AFHTTPSessionManager *_manager = nil;
+    static id sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _manager = [[AFHTTPSessionManager alloc]initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        _manager.responseSerializer = [AFJSONResponseSerializer serializer];
-        _manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+        sharedInstance = [[self alloc] init];
     });
-    return _manager;
+    return sharedInstance;
 }
 
-+ (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock
+- (id)init {
+    self = [super init];
+    if (self) {
+        _config = [T8NetworkConifig sharedInstance];
+        _manager = [self  shareHttpManager];
+    }
+    return self;
+}
+
+- (AFHTTPSessionManager *)shareHttpManager
 {
-    AFHTTPSessionManager *manager = [self shareHttpManager];
+    static AFHTTPSessionManager *manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[AFHTTPSessionManager alloc]initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
+    });
+    return manager;
+}
+
+- (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock
+{
     
-    NSString *method = [self getMethodTypeString:httpMethod];
-    NSString *urlStr = [self getRequestUrl:strUrlPath];
-    NSLog(@"%@", urlStr);
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:urlStr parameters:dictParams error:nil];
-    if (T8RequestHeaderBlock) {
-        T8RequestHeaderBlock(request);
+    NSString *method = [T8NetworkPrivate getMethodTypeString:httpMethod];
+    NSString *requestUrl = [T8NetworkPrivate buildRequestUrl:_config.baseUrl detailUrl:strUrlPath];
+
+    NSMutableURLRequest *request = [_manager.requestSerializer requestWithMethod:method URLString:requestUrl parameters:dictParams error:nil];
+    if (_config.headerBlock) {
+        _config.headerBlock(request);
     }
     
-    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+    NSURLSessionDataTask *dataTask = [_manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         if (error) {
             T8NetworkError *_error = [T8NetworkError errorWithNSError:error];
             completeBlock(RequestStatusFailure, nil, _error);
@@ -59,12 +68,12 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     [dataTask resume];
 }
 
-+ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock
+- (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock
 {
     AFHTTPSessionManager *manager = [self shareHttpManager];
-    NSString *urlStr = [self getRequestUrl:urlPath];
+    NSString *requetUrl = [T8NetworkPrivate buildRequestUrl:_config.baseUrl detailUrl:urlPath];
 
-    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[self getRequestUrl:urlStr] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:requetUrl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         if (fileModel.type == FileModelData) {
             if (fileModel.data) {
                 [formData appendPartWithFileData:fileModel.data name:fileModel.name fileName:fileModel.fileName mimeType:fileModel.mimeType];
@@ -77,8 +86,8 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
         }
     } error:nil];
 
-    if (T8RequestHeaderBlock) {
-        T8RequestHeaderBlock(request);
+    if (_config.headerBlock) {
+        _config.headerBlock(request);
     }
 
     NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -95,15 +104,12 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     [uploadTask resume];
 }
 
-
-
-+ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
+- (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)urlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
 {
-    AFHTTPSessionManager *manager = [self shareHttpManager];
-    NSString *urlStr = [self getRequestUrl:urlPath];
+    NSString *requestUrl = [T8NetworkPrivate buildRequestUrl:_config.baseUrl detailUrl:urlPath];
     NSArray *fileModelArray = files.fileModelArray;
     
-    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[self getRequestUrl:urlStr] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *request = [_manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:requestUrl parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         for (T8FileModel *fileModel in fileModelArray) {
             if (fileModel.type == FileModelData) {
                 if (fileModel.data) {
@@ -117,11 +123,11 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
         }
     } error:nil];
     
-    if (T8RequestHeaderBlock) {
-        T8RequestHeaderBlock(request);
+    if (_config.headerBlock) {
+        _config.headerBlock(request);
     }
     
-    NSURLSessionUploadTask *uploadTask = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSURLSessionUploadTask *uploadTask = [_manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
         progressBlock(uploadProgress.completedUnitCount, uploadProgress.totalUnitCount, 0);
     } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (error) {
@@ -133,56 +139,6 @@ static RequestHeaderBlock T8RequestHeaderBlock = nil;
     }];
     [uploadTask resume];
 }
-
-#pragma mark Private
-
-/**
- *  HTTP方法:枚举->字符串
- */
-+ (NSString *)getMethodTypeString:(HttpMethod)httpMethod{
-    NSString *method = nil;
-    switch(httpMethod) {
-        case HttpMethodGet:
-            method = @"GET";
-            break;
-        case HttpMethodPost:
-            method = @"POST";
-            break;
-        case HttpMethodPut:
-            method = @"PUT";
-            break;
-        case HttpMethodDelete:
-            method = @"DELETE";
-            break;
-        case HttpMethodPatch:
-            method = @"PATCH";
-            break;
-        case HttpMethodHead:
-            method = @"HEAD";
-            break;
-        default:
-            break;
-    }
-    return method;
-}
-
-/**
- *  拼接URL:baseURL+服务路径
- */
-+ (NSString *)getRequestUrl:(NSString *)path
-{
-    if ([path hasPrefix:@"http"]) {
-        return path;
-    }
-    
-    if (T8BaseNetworkUrl.length>0) {
-        return [NSString stringWithFormat:@"%@/%@", T8BaseNetworkUrl, path];
-    }else{
-        return path;
-    }
-}
-
-
 @end
 
 @implementation T8FileModel

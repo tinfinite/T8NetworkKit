@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3FB896DB94C8572FB4C92510 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 042B099277402A303BA96B6C /* libPods.a */; };
+		751532DF1CA235A5004233F8 /* T8NetworkPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 751532DE1CA235A5004233F8 /* T8NetworkPrivate.m */; };
 		75DE4EDA1CA01FBA00197A05 /* abc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 75DE4ED91CA01FBA00197A05 /* abc.jpg */; };
+		75DE4EDD1CA163DD00197A05 /* T8NetworkConifig.m in Sources */ = {isa = PBXBuildFile; fileRef = 75DE4EDC1CA163DD00197A05 /* T8NetworkConifig.m */; };
 		75E33AED1C9CF3C600CBD0B8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AEC1C9CF3C600CBD0B8 /* main.m */; };
 		75E33AF01C9CF3C600CBD0B8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AEF1C9CF3C600CBD0B8 /* AppDelegate.m */; };
 		75E33AF31C9CF3C600CBD0B8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75E33AF21C9CF3C600CBD0B8 /* ViewController.m */; };
@@ -25,7 +27,11 @@
 /* Begin PBXFileReference section */
 		042B099277402A303BA96B6C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		376022D6C7BDBC00C21502E8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		751532DD1CA235A5004233F8 /* T8NetworkPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = T8NetworkPrivate.h; sourceTree = "<group>"; };
+		751532DE1CA235A5004233F8 /* T8NetworkPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = T8NetworkPrivate.m; sourceTree = "<group>"; };
 		75DE4ED91CA01FBA00197A05 /* abc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = abc.jpg; sourceTree = "<group>"; };
+		75DE4EDB1CA163DD00197A05 /* T8NetworkConifig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = T8NetworkConifig.h; sourceTree = "<group>"; };
+		75DE4EDC1CA163DD00197A05 /* T8NetworkConifig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = T8NetworkConifig.m; sourceTree = "<group>"; };
 		75E33AE81C9CF3C600CBD0B8 /* T8NetworkKitDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = T8NetworkKitDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75E33AEC1C9CF3C600CBD0B8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		75E33AEE1C9CF3C600CBD0B8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -114,10 +120,14 @@
 		75E33B021C9CF53100CBD0B8 /* T8NetWorkKit */ = {
 			isa = PBXGroup;
 			children = (
+				751532DD1CA235A5004233F8 /* T8NetworkPrivate.h */,
+				751532DE1CA235A5004233F8 /* T8NetworkPrivate.m */,
 				75E33B031C9CF73E00CBD0B8 /* T8NetworkBaseService.h */,
 				75E33B041C9CF73E00CBD0B8 /* T8NetworkBaseService.m */,
 				75E33B061C9D05AD00CBD0B8 /* T8NetworkError.h */,
 				75E33B071C9D05AD00CBD0B8 /* T8NetworkError.m */,
+				75DE4EDB1CA163DD00197A05 /* T8NetworkConifig.h */,
+				75DE4EDC1CA163DD00197A05 /* T8NetworkConifig.m */,
 			);
 			path = T8NetWorkKit;
 			sourceTree = "<group>";
@@ -263,9 +273,11 @@
 			files = (
 				75E33B081C9D05AD00CBD0B8 /* T8NetworkError.m in Sources */,
 				75E33AF31C9CF3C600CBD0B8 /* ViewController.m in Sources */,
+				75DE4EDD1CA163DD00197A05 /* T8NetworkConifig.m in Sources */,
 				75E33B1A1C9D850500CBD0B8 /* GetParams.m in Sources */,
 				75E33B121C9D2DEE00CBD0B8 /* DemoService.m in Sources */,
 				75E33B171C9D814000CBD0B8 /* PostParams.m in Sources */,
+				751532DF1CA235A5004233F8 /* T8NetworkPrivate.m in Sources */,
 				75E33AF01C9CF3C600CBD0B8 /* AppDelegate.m in Sources */,
 				75E33AED1C9CF3C600CBD0B8 /* main.m in Sources */,
 				75E33B051C9CF73E00CBD0B8 /* T8NetworkBaseService.m in Sources */,

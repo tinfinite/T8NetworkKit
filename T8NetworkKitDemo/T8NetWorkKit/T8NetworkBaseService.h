@@ -7,23 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "T8NetworkPrivate.h"
+#import "T8NetworkError.h"
+
 @class T8NetworkError;
-
-typedef NS_ENUM(NSInteger, RequestStatus)
-{
-    RequestStatusSuccess,
-    RequestStatusFailure
-};
-
-typedef NS_ENUM(NSInteger, HttpMethod) {
-    HttpMethodGet,
-    HttpMethodPost,
-    HttpMethodPut,
-    HttpMethodDelete,
-    HttpMethodPatch,
-    HttpMethodHead
-};
-
+@class T8FileModel;
+@class T8FileModelArray;
 
 typedef NS_ENUM(NSInteger, FileModelType) {
     FileModelData,
@@ -32,51 +21,21 @@ typedef NS_ENUM(NSInteger, FileModelType) {
 
 
 typedef void(^RequestComplete)(RequestStatus status, NSDictionary *data, T8NetworkError *error);
-typedef void(^RequestHeaderBlock)(NSMutableURLRequest *request);
 typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite);
-
-/**
- *  文件模型
- */
-@interface T8FileModel : NSObject
-@property (nonatomic, assign) FileModelType type;
-@property (nonatomic, copy) NSString *path;
-@property (nonatomic, strong) NSData *data;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *fileName;
-@property (nonatomic, copy) NSString *mimeType;
-@end
-
-/**
- *  文件模型数组
- */
-@interface T8FileModelArray : NSObject
-@property (nonatomic, strong) NSArray<T8FileModel *> *fileModelArray;
-
-@end
-
 
 @interface T8NetworkBaseService : NSObject
 
-/**
- *  设置URL
- */
-+ (void)setBaseUrl:(NSString *)baseUrl;
++ (T8NetworkBaseService *)shrareInstance;
 
 /**
- *  设置header参数
- */
-+ (void)setHeaderBlock:(RequestHeaderBlock)headerBlock;
-
-/**
- *  根据HTTP方法获取数据
+ *  根据HTTP方法(GET, POST, DELETE, PUT, PATCH, DELETE)获取数据
  *
  *  @param strUrlPath    接口的地址
  *  @param httpMethod    HTTP方法
  *  @param dictParams    参数
  *  @param completeBlock 回调方法
  */
-+ (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock;
+- (void)sendRequestUrlPath:(NSString *)strUrlPath httpMethod:(HttpMethod)httpMethod dictParams:(NSMutableDictionary *)dictParams completeBlock:(RequestComplete)completeBlock;
 /**
  *  上传单个文件
  *
@@ -86,7 +45,7 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传成功回调方法
  */
-+ (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
+- (void)uploadFile:(T8FileModel *)fileModel urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
 
 /**
  *  上传一组文件
@@ -97,7 +56,38 @@ typedef void(^RequestProgressBlock)(NSUInteger bytesWritten, long long totalByte
  *  @param progressBlock 上传进度回调方法
  *  @param completBlock  上传完成回调方法
  */
-+ (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
+- (void)uploadFiles:(T8FileModelArray *)files urlPath:(NSString *)strUrlPath params:(NSMutableDictionary *)params progressBlock:(RequestProgressBlock)progressBlock completeBlock:(RequestComplete)completeBlock;
 
 @end
+
+
+/**
+ *  文件模型
+ */
+@interface T8FileModel : NSObject
+
+@property (nonatomic, assign) FileModelType type;
+
+@property (nonatomic, copy) NSString *path;
+
+@property (nonatomic, strong) NSData *data;
+
+@property (nonatomic, copy) NSString *name;
+
+@property (nonatomic, copy) NSString *fileName;
+
+@property (nonatomic, copy) NSString *mimeType;
+
+@end
+
+
+/**
+ *  文件模型数组
+ */
+@interface T8FileModelArray : NSObject
+@property (nonatomic, strong) NSArray<T8FileModel *> *fileModelArray;
+
+@end
+
+
 
